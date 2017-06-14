@@ -27,8 +27,10 @@ public class QueryUtils {
     // Constants for JSON objects
     private static final String JSON_ITEMS = "items";
     private static final String JSON_ID = "id";
+    private static final String JSON_TYPE = "type";
     private static final String JSON_VOLUME_INFO = "volumeInfo";
     private static final String JSON_TITLE = "title";
+    private static final String JSON_IDENTIFIER = "identifier";
     private static final String JSON_AUTHORS = "authors";
     private static final String JSON_PUBLISHER = "publisher";
     private static final String JSON_PUBLISHED_DATE = "publishedDate";
@@ -232,7 +234,7 @@ public class QueryUtils {
             JSONObject volumeInfoJSON = currentBookJSON.getJSONObject(JSON_VOLUME_INFO);
 
             // Title
-            String title = volumeInfoJSON.getString("title");
+            String title = volumeInfoJSON.getString(JSON_TITLE);
 
             // Authors
             ArrayList<String> authors = new ArrayList<String>();
@@ -243,19 +245,19 @@ public class QueryUtils {
                 }
             }
             // Publisher
-            String publisher = volumeInfoJSON.getString(JSON_PUBLISHER);
+            String publisher = volumeInfoJSON.optString(JSON_PUBLISHER);
 
             // Published Date
-            String publishedDate = volumeInfoJSON.getString(JSON_PUBLISHED_DATE);
+            String publishedDate = volumeInfoJSON.optString(JSON_PUBLISHED_DATE);
 
             // Industry identifiers
             ArrayList<IndustryIdentifier> industryIdentifiers = new ArrayList<IndustryIdentifier>();
-            JSONArray industryIdentifierJSONArray = volumeInfoJSON.getJSONArray("industryIdentifiers");
+            JSONArray industryIdentifierJSONArray = volumeInfoJSON.optJSONArray("industryIdentifiers");
             if (industryIdentifierJSONArray != null) {
                 for (int j = 0; j < industryIdentifierJSONArray.length(); j++) {
                     JSONObject industryIdentifierJSON = industryIdentifierJSONArray.getJSONObject(j);
-                    String type = industryIdentifierJSON.getString("type");
-                    String identifier = industryIdentifierJSON.getString("identifier");
+                    String type = industryIdentifierJSON.optString(JSON_TYPE);
+                    String identifier = industryIdentifierJSON.getString(JSON_IDENTIFIER);
                     IndustryIdentifier industryIdentifier = new IndustryIdentifier(type, identifier);
                     industryIdentifiers.add(industryIdentifier);
                 }
