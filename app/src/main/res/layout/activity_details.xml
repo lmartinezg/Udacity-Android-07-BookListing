@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context="com.example.android.booklisting.DetailsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title_detail"
+            style="@style/details_label"
+            android:textSize="20sp"
+            tools:text="Book title placeholder" />
+
+        <TextView
+            android:id="@+id/authors_label"
+            style="@style/details_label"
+            android:text="@string/authors" />
+
+        <TextView
+            android:id="@+id/authors"
+            style="@style/details_data"
+            tools:text="Authors placeholder, Authors placeholder, Authors placeholder, Authors placeholder, Authors placeholder" />
+
+        <TextView
+            android:id="@+id/publisher_label"
+            style="@style/details_label"
+            android:text="@string/publisher" />
+
+        <TextView
+            android:id="@+id/publisher"
+            style="@style/details_data"
+            tools:text="Publisher placeholder" />
+
+        <TextView
+            style="@style/details_label"
+            android:text="@string/published_on" />
+
+        <TextView
+            android:id="@+id/published_date"
+            style="@style/details_data"
+            tools:text="xxxx-xx-xx" />
+
+
+        <TextView
+            style="@style/details_label"
+            android:text="@string/identifiers" />
+
+        <TextView
+            android:id="@+id/identifiers"
+            style="@style/details_data"
+            tools:text="placeholder\nplaceholder\nplaceholder" />
+
+        <Button
+            android:id="@+id/more_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableLeft="@drawable/ic_open_in_browser_black_24dp"
+            android:drawablePadding="8dp"
+            android:minHeight="44dp"
+            android:text="@string/more_info" />
+
+    </LinearLayout>
+
+</ScrollView>

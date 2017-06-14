@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Book Listing</string>
+    <string name="authors">Autores</string>
+    <string name="enter_your_query_to_find_books">Palabras a buscar</string>
+    <string name="identifiers">Identificadores</string>
+    <string name="more_info">Más información</string>
+    <string name="no_books">No se encontraron libros</string>
+    <string name="no_internet_connection">No se dispone de conexión a Internet</string>
+    <string name="published_on">Fecha de publicación</string>
+    <string name="publisher">Editor</string>
+    <string name="search">Buscar</string>
+</resources>

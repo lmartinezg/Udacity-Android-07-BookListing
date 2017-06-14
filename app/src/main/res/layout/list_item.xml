@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FCE4EC"
+    android:minHeight="88dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        tools:text="Book title placeholder" />
+
+    <TextView
+        android:id="@+id/authors"
+        tools:text="Authors placeholder"
+        android:layout_below="@+id/title"
+        style="@style/itemDetail" />
+
+    <TextView
+        android:id="@+id/publisher"
+        style="@style/itemDetail"
+        android:layout_below="@+id/authors"
+        tools:text="Publisher placeholder" />
+
+    <LinearLayout
+        android:id="@+id/identifier"
+        style="@style/itemDetail"
+        android:layout_below="@+id/publisher"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/identifier_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            tools:text="ISBN_13" />
+
+        <TextView
+            android:id="@+id/identifier_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="1234567890123" />
+
+    </LinearLayout>
+
+    <TextView
+        style="@style/itemDetail"
+        android:background="?android:attr/selectableItemBackground"
+        android:minHeight="88dp">
+
+    </TextView>
+
+</RelativeLayout>

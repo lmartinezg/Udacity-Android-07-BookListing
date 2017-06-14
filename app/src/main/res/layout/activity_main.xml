@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/queryLabel"
+        android:text="@string/enter_your_query_to_find_books"
+        style="@style/queryLabel" />
+
+    <EditText
+        android:id="@+id/queryText"
+        style="@style/queryText" />
+
+    <Button
+        android:id="@+id/search_button"
+        android:text="@string/search"
+        style="@style/buttonSearch" />
+
+</LinearLayout>
