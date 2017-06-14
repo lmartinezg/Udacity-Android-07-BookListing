@@ -24,6 +24,30 @@ import java.util.List;
 
 public class QueryUtils {
 
+    // Constants for JSON objects
+    private static final String JSON_ITEMS = "items";
+    private static final String JSON_ID = "id";
+    private static final String JSON_VOLUME_INFO = "volumeInfo";
+    private static final String JSON_TITLE = "title";
+    private static final String JSON_AUTHORS = "authors";
+    private static final String JSON_PUBLISHER = "publisher";
+    private static final String JSON_PUBLISHED_DATE = "publishedDate";
+    private static final String JSON_PAGE_COUNT = "pageCount";
+    private static final String JSON_IMAGE_LINKS = "imageLinks";
+    private static final String JSON_LANGUAGE = "language";
+    private static final String JSON_INFO_LINK = "infoLink";
+    private static final String JSON_SMALL_THUMBNAIL = "smallThumbnail";
+    private static final String JSON_THUMBNAIL = "thumbnail";
+
+    // Constans for error messages
+    // They should go in strings.xml for transation, but didn't find a way
+    // to get them from static methods.
+    private static final String PROBLEM_HTTP = "Problem making the HTTP request.";
+    private static final String PROBLEM_URL = "Problem building the URL";
+    private static final String ERROR_RESPONSE_CODE = "Error response code: ";
+    private static final String PROBLEM_WEB_SERVICE = "Problem retrieving the results from the web service.";
+    private static final String PROBLEM_PARSING_JSON = "Problem parsing the book JSON results.";
+
     /**
      * Tag for log messages
      */
@@ -57,7 +81,7 @@ public class QueryUtils {
         try {
             jsonResponse = makeHttpRequest(url);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+            Log.e(LOG_TAG, PROBLEM_HTTP, e);
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link Book}s
@@ -75,7 +99,7 @@ public class QueryUtils {
         try {
             url = new URL(stringUrl);
         } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, "Problem building the URL", e);
+            Log.e(LOG_TAG, PROBLEM_URL, e);
         }
         return url;
     }
@@ -106,10 +130,10 @@ public class QueryUtils {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
-                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+                Log.e(LOG_TAG, ERROR_RESPONSE_CODE + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the results from the web service.", e);
+            Log.e(LOG_TAG, PROBLEM_WEB_SERVICE, e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -155,8 +179,6 @@ public class QueryUtils {
         // Create an empty ArrayList that we can start adding books to
         List<Book> books = new ArrayList<Book>();
 
-        Book book = null;
-
         // Try to parse the JSON response string. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
@@ -167,88 +189,15 @@ public class QueryUtils {
 
             // Extract the JSONArray associated with the key called "items",
             // which represents a list of books.
-            JSONArray bookArray = baseJsonResponse.getJSONArray("items");
+            JSONArray bookArray = baseJsonResponse.getJSONArray(JSON_ITEMS);
 
             // For each book in the bookArray, create an {@link Book} object
             for (int i = 0; i < bookArray.length(); i++) {
 
-                // Get a single book at position i within the list of earthquakes
+                // Get a single book at position i within the list of books
                 JSONObject currentBookJSON = bookArray.getJSONObject(i);
 
-                // ID
-                String id = currentBookJSON.getString("id");
-
-                // Volume Info
-                JSONObject volumeInfoJSON = currentBookJSON.getJSONObject("volumeInfo");
-
-                // Title
-                String title = volumeInfoJSON.getString("title");
-
-                // Authors
-                ArrayList<String> authors = new ArrayList<String>();
-                JSONArray authorJSONArray = volumeInfoJSON.optJSONArray("authors");
-                if (authorJSONArray != null) {
-                    for (int j = 0; j < authorJSONArray.length(); j++) {
-                        authors.add(authorJSONArray.getString(j));
-                    }
-                }
-
-                // Publisher
-                String publisher = volumeInfoJSON.optString("publisher");
-
-                // Published Date
-                String publishedDate = volumeInfoJSON.optString("publishedDate");
-
-                // Industry identifiers
-                ArrayList<IndustryIdentifier> industryIdentifiers = new ArrayList<IndustryIdentifier>();
-                JSONArray industryIdentifierJSONArray = volumeInfoJSON.optJSONArray("industryIdentifiers");
-                if (industryIdentifierJSONArray != null) {
-                    for (int j = 0; j < industryIdentifierJSONArray.length(); j++) {
-                        JSONObject industryIdentifierJSON = industryIdentifierJSONArray.getJSONObject(j);
-                        String type = industryIdentifierJSON.getString("type");
-                        String identifier = industryIdentifierJSON.getString("identifier");
-                        IndustryIdentifier industryIdentifier = new IndustryIdentifier(type, identifier);
-                        industryIdentifiers.add(industryIdentifier);
-                    }
-                }
-
-                // Page count
-                int pageCount = volumeInfoJSON.optInt("pageCount");
-
-                // Image Links
-                ArrayList<ImageLink> imageLinks = new ArrayList<ImageLink>();
-                String type;
-                String url;
-                ImageLink imageLink;
-
-                JSONObject imagelinkJSONObject = volumeInfoJSON.optJSONObject("imageLinks");
-                if (imagelinkJSONObject != null) {
-
-                    type = "smallThumbnail";
-                    url = imagelinkJSONObject.optString(type);
-                    if (url != null) {
-                        imageLink = new ImageLink(type, url);
-                        imageLinks.add(imageLink);
-                    }
-
-                    type = "thumbnail";
-                    url = imagelinkJSONObject.optString(type);
-                    if (url != null) {
-                        imageLink = new ImageLink(type, url);
-                        imageLinks.add(imageLink);
-                    }
-                }
-
-                // Language
-                String language = volumeInfoJSON.optString("language");
-
-                // Info Link
-                String infoLink = volumeInfoJSON.optString("infoLink");
-
-
-                // Create a new {@link Book} object with the parsed data from the JSON response.
-                book = new Book(id, title, authors, publisher, publishedDate,
-                        industryIdentifiers, pageCount, imageLinks, language, infoLink);
+                Book book = JSONtoBook(currentBookJSON);
 
                 // Add the new {@link Book} to the list of books.
                 books.add(book);
@@ -257,7 +206,7 @@ public class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the book JSON results", e);
+            Log.e(LOG_TAG, PROBLEM_PARSING_JSON, e);
         }
 
         // Return the list of books
@@ -277,40 +226,43 @@ public class QueryUtils {
         // For a given book, extract its data
         try {
             // ID
-            String id = currentBookJSON.getString("id");
+            String id = currentBookJSON.getString(JSON_ID);
 
             // Volume Info
-            JSONObject volumeInfoJSON = currentBookJSON.getJSONObject("volumeInfo");
+            JSONObject volumeInfoJSON = currentBookJSON.getJSONObject(JSON_VOLUME_INFO);
 
             // Title
             String title = volumeInfoJSON.getString("title");
 
             // Authors
             ArrayList<String> authors = new ArrayList<String>();
-            JSONArray authorJSONArray = volumeInfoJSON.getJSONArray("authors");
-            for (int j = 0; j < authorJSONArray.length(); j++) {
-                authors.add(authorJSONArray.getString(j));
+            JSONArray authorJSONArray = volumeInfoJSON.optJSONArray(JSON_AUTHORS);
+            if (authorJSONArray != null) {
+                for (int j = 0; j < authorJSONArray.length(); j++) {
+                    authors.add(authorJSONArray.getString(j));
+                }
             }
-
             // Publisher
-            String publisher = volumeInfoJSON.getString("publisher");
+            String publisher = volumeInfoJSON.getString(JSON_PUBLISHER);
 
             // Published Date
-            String publishedDate = volumeInfoJSON.getString("publishedDate");
+            String publishedDate = volumeInfoJSON.getString(JSON_PUBLISHED_DATE);
 
             // Industry identifiers
             ArrayList<IndustryIdentifier> industryIdentifiers = new ArrayList<IndustryIdentifier>();
             JSONArray industryIdentifierJSONArray = volumeInfoJSON.getJSONArray("industryIdentifiers");
-            for (int j = 0; j < industryIdentifierJSONArray.length(); j++) {
-                JSONObject industryIdentifierJSON = industryIdentifierJSONArray.getJSONObject(j);
-                String type = industryIdentifierJSON.getString("type");
-                String identifier = industryIdentifierJSON.getString("identifier");
-                IndustryIdentifier industryIdentifier = new IndustryIdentifier(type, identifier);
-                industryIdentifiers.add(industryIdentifier);
+            if (industryIdentifierJSONArray != null) {
+                for (int j = 0; j < industryIdentifierJSONArray.length(); j++) {
+                    JSONObject industryIdentifierJSON = industryIdentifierJSONArray.getJSONObject(j);
+                    String type = industryIdentifierJSON.getString("type");
+                    String identifier = industryIdentifierJSON.getString("identifier");
+                    IndustryIdentifier industryIdentifier = new IndustryIdentifier(type, identifier);
+                    industryIdentifiers.add(industryIdentifier);
+                }
             }
 
             // Page count
-            int pageCount = volumeInfoJSON.getInt("pageCount");
+            int pageCount = volumeInfoJSON.getInt(JSON_PAGE_COUNT);
 
             // Image Links
             ArrayList<ImageLink> imageLinks = new ArrayList<ImageLink>();
@@ -318,23 +270,24 @@ public class QueryUtils {
             String url;
             ImageLink imageLink;
 
-            JSONObject imagelinkJSONObject = volumeInfoJSON.getJSONObject("imageLinks");
+            JSONObject imagelinkJSONObject = volumeInfoJSON.optJSONObject(JSON_IMAGE_LINKS);
+            if (imagelinkJSONObject != null) {
+                type = JSON_SMALL_THUMBNAIL;
+                url = imagelinkJSONObject.optString(type);
+                imageLink = new ImageLink(type, url);
+                imageLinks.add(imageLink);
 
-            type = "smallThumbnail";
-            url = imagelinkJSONObject.getString(type);
-            imageLink = new ImageLink(type, url);
-            imageLinks.add(imageLink);
-
-            type = "thumbnail";
-            url = imagelinkJSONObject.getString(type);
-            imageLink = new ImageLink(type, url);
-            imageLinks.add(imageLink);
+                type = JSON_THUMBNAIL;
+                url = imagelinkJSONObject.optString(type);
+                imageLink = new ImageLink(type, url);
+                imageLinks.add(imageLink);
+            }
 
             // Language
-            String language = volumeInfoJSON.getString("language");
+            String language = volumeInfoJSON.getString(JSON_LANGUAGE);
 
             // Info Link
-            String infoLink = volumeInfoJSON.getString("infoLink");
+            String infoLink = volumeInfoJSON.getString(JSON_INFO_LINK);
 
 
             // Create a new {@link Book} object with the parsed data from the JSON response.
@@ -345,7 +298,7 @@ public class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the book JSON results", e);
+            Log.e(LOG_TAG, "Problem parsing the book JSON results", e);
         }
 
         return book;
