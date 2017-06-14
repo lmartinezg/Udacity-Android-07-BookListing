@@ -3,23 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FCE4EC"
-    android:minHeight="88dp"
+    android:background="@color/colorListItemBackground"
+    android:minHeight="@dimen/min_height"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/padding_general">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="@dimen/title_text_size"
         tools:text="Book title placeholder" />
 
     <TextView
         android:id="@+id/authors"
-        tools:text="Authors placeholder"
+        style="@style/itemDetail"
         android:layout_below="@+id/title"
-        style="@style/itemDetail" />
+        tools:text="Authors placeholder" />
 
     <TextView
         android:id="@+id/publisher"
@@ -37,7 +37,7 @@
             android:id="@+id/identifier_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="@dimen/id_type_margin_right"
             tools:text="ISBN_13" />
 
         <TextView
@@ -51,7 +51,7 @@
     <TextView
         style="@style/itemDetail"
         android:background="?android:attr/selectableItemBackground"
-        android:minHeight="88dp">
+        android:minHeight="@dimen/min_height">
 
     </TextView>
 

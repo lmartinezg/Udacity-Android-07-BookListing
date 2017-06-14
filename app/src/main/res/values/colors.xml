@@ -8,4 +8,6 @@
     <color name="colorDataText">#757575</color>
 
     <color name="colorItemDivider">#FAFAFA</color>
+
+    <color name="colorListItemBackground">#FCE4EC</color>
 </resources>

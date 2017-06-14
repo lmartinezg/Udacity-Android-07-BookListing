@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:padding="@dimen/padding_general"
     tools:context="com.example.android.booklisting.DetailsActivity">
 
     <LinearLayout
@@ -14,7 +14,7 @@
         <TextView
             android:id="@+id/title_detail"
             style="@style/details_label"
-            android:textSize="20sp"
+            android:textSize="@dimen/title_detail_text_size"
             tools:text="Book title placeholder" />
 
         <TextView
@@ -60,10 +60,10 @@
             android:id="@+id/more_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/padding_general"
             android:drawableLeft="@drawable/ic_open_in_browser_black_24dp"
-            android:drawablePadding="8dp"
-            android:minHeight="44dp"
+            android:drawablePadding="@dimen/drawable_padding"
+            android:minHeight="@dimen/min_height"
             android:text="@string/more_info" />
 
     </LinearLayout>

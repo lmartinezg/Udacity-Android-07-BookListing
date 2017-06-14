@@ -12,40 +12,40 @@
     <style name="details_label">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:textColor">@color/colorLabelText</item>
+        <item name="android:paddingTop">@dimen/padding_top_details_label</item>
+        <item name="android:textSize">@dimen/label_text_size</item>
+       <item name="android:textColor">@color/colorLabelText</item>
     </style>
 
     <!-- Values on detail activity -->
     <style name="details_data">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:paddingTop">0dp</item>
+        <item name="android:textSize">@dimen/data_text_size</item>
+        <item name="android:paddingTop">@dimen/padding_top_details_data</item>
         <item name="android:textColor">@color/colorDataText</item>
     </style>
 
     <style name="queryLabel">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textSize">@dimen/label_text_size</item>
+        <item name="android:paddingBottom">@dimen/padding_general</item>
     </style>
 
     <style name="queryText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingTop">@dimen/padding_general</item>
+        <item name="android:paddingBottom">@dimen/padding_general</item>
         <item name="android:inputType">text</item>
     </style>
 
     <style name="buttonSearch">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">44dp</item>
-        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:minHeight">@dimen/min_height</item>
+        <item name="android:layout_marginTop">@dimen/padding_general</item>
         <item name="android:gravity">center</item>
     </style>
 
